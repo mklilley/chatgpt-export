@@ -69,8 +69,12 @@ body.querySelectorAll('.text-message').forEach((n, i) => {
         // Only convert response markup to markdown
         text += `## RESPONSE ${num}\n\n${ts.turndown(prose.innerHTML)}\n\n`;
     } else {
-        // Keep prompt text as it was entered
-        text += `## PROMPT ${num}\n\n${n.querySelector('div').innerText}\n\n`;
+        // Convert prompt HTML to markdown to preserve code fences/math
+        // Original (kept for easy revert):
+        // text += `## PROMPT ${num}\n\n${n.querySelector('div').innerText}\n\n`;
+        const prompt = n.querySelector('.whitespace-pre-wrap') || n.querySelector('div');
+        const promptHtml = prompt ? prompt.innerHTML : n.innerHTML;
+        text += `## PROMPT ${num}\n\n${ts.turndown(promptHtml)}\n\n`;
     }
 });
 
