@@ -3,7 +3,8 @@ const tables = require('turndown-plugin-gfm').tables;
 const ts = new TurndownService({
     'hr': '___________',
     'preformattedCode': true,
-    'headingStyle': 'setext',
+    'headingStyle': 'atx',
+    'bulletListMarker': '-',
     'codeBlockStyle': 'fenced'
  });
 ts.use(tables);
