@@ -1,12 +1,12 @@
-# ChatGPT Export Browser Bookmarklet
+# ChatGPT Export Browser Bookmarklet (Fork)
 
 The ChatGPT Export bookmarklet is a convenient tool that allows you to effortlessly export conversations with ChatGPT as markdown files. With this bookmarklet, you can capture and save your ChatGPT conversations in a readable format for easy reference and sharing.
 
+This repository is a fork of the original project by Ramiro Gómez. The original work is here for credit and historical context: https://github.com/yaph/chatgpt-export (upstream). This fork modifies the export behavior and build output to match my workflow.
+
 ## Installation
 
-To get started, simply visit the [ChatGPT to Markdown web page](https://geeksta.net/tools/chatgpt-to-markdown/) and drag the bookmarklet link to your browser's bookmark toolbar. You can also review the source code of the link to ensure its integrity and functionality.
-
-Alternatively, if you prefer a more hands-on approach, you can clone this repository, install the necessary dependencies, and compile the code on your own machine.
+This fork doesn't use the upstream bookmarklet page. Use the prebuilt file in this repo or build it locally (instructions below).
 
 ## Prebuilt bookmarklet
 
