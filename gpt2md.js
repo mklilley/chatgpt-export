@@ -8,6 +8,41 @@ const ts = new TurndownService({
  });
 ts.use(tables);
 
+const extractLatex = (node) => {
+    if (!node || !node.querySelector) return '';
+    let annotation = node.querySelector('annotation[encoding="application/x-tex"]');
+    if (!annotation) annotation = node.querySelector('annotation');
+    if (annotation && annotation.textContent) return annotation.textContent.trim();
+    if (typeof node.getAttribute === 'function') {
+        const dataLatex = node.getAttribute('data-latex') || node.getAttribute('data-tex');
+        if (dataLatex) return dataLatex.trim();
+        const aria = node.getAttribute('aria-label');
+        if (aria) return aria.trim();
+    }
+    return node.textContent ? node.textContent.trim() : '';
+};
+
+ts.addRule('math', {
+    filter: function (node) {
+        if (!node || node.nodeType !== 1 || !node.classList) return false;
+        if (node.closest && node.closest('pre,code')) return false;
+        if (node.classList.contains('katex-display')) return true;
+        if (node.classList.contains('katex')) {
+            if (node.closest && node.closest('.katex-display')) return false;
+            return true;
+        }
+        return false;
+    },
+    replacement: function (content, node) {
+        const latex = extractLatex(node);
+        if (!latex) return '';
+        if (node.classList && node.classList.contains('katex-display')) {
+            return `\n\n$$\n${latex}\n$$\n\n`;
+        }
+        return `$${latex}$`;
+    }
+});
+
 // Clone to not modify the actual `document.body` in the code that follows
 const body = document.body.cloneNode(true);
 
