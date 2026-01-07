@@ -8,6 +8,17 @@ To get started, simply visit the [ChatGPT to Markdown web page](https://geeksta.
 
 Alternatively, if you prefer a more hands-on approach, you can clone this repository, install the necessary dependencies, and compile the code on your own machine.
 
+## Local install & build
+
+Prerequisites: Node.js (LTS) and npm.
+
+1. Clone the repo and install dependencies:
+   - `npm install`
+2. Build the bookmarklet bundle:
+   - `npm run build`
+
+The build step bundles `gpt2md.js` and writes the bookmarklet output to `dist/gpt2md.bookmarklet.js`. Copy the contents of that file into a new browser bookmark URL (or replace the URL of an existing bookmarklet) to run it.
+
 ## How it works
 
 Once the bookmarklet link is clicked on a ChatGPT conversation page the `document.body` is cloned and modified in the cloned version to remove any unnecessary information, ensuring a clean and concise output. Finally, the resulting HTML code is converted to markdown format and downloaded as a text file. The file is automatically named based on the conversation's title in the ChatGPT interface.
