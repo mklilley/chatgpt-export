@@ -8,6 +8,10 @@ To get started, simply visit the [ChatGPT to Markdown web page](https://geeksta.
 
 Alternatively, if you prefer a more hands-on approach, you can clone this repository, install the necessary dependencies, and compile the code on your own machine.
 
+## Prebuilt bookmarklet
+
+The repo includes a prebuilt bookmarklet at `dist/gpt2md.bookmarklet.js` so you can copy it without building locally. Open the file on GitHub, click the **Raw** button, and copy the contents into a new bookmark's URL field.
+
 ## Local install & build
 
 Prerequisites: Node.js (LTS) and npm.
