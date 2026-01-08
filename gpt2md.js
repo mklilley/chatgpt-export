@@ -91,10 +91,37 @@ body.querySelectorAll('.text-message').forEach((n, i) => {
     }
 });
 
-// Download
-const a = document.createElement('a');
-a.download = `${document.title}.md`;
-a.href = URL.createObjectURL(new Blob([text]));
-a.style.display = 'none';
-document.body.appendChild(a);
-a.click();
+const downloadMarkdown = () => {
+    const a = document.createElement('a');
+    a.download = `${document.title}.md`;
+    a.href = URL.createObjectURL(new Blob([text]));
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+};
+
+const copyMarkdownToClipboard = () => {
+    if (!navigator.clipboard?.writeText) {
+        return Promise.reject(new Error('Clipboard API not available'));
+    }
+    return navigator.clipboard.writeText(text);
+};
+
+const copyToClipboard = confirm(
+    'Export Markdown\n\nOK: copy to clipboard\nCancel: download .md file'
+);
+
+if (copyToClipboard) {
+    copyMarkdownToClipboard()
+        .then(() => {
+            alert('Copied Markdown to clipboard.');
+        })
+        .catch((err) => {
+            console.error(err);
+            downloadMarkdown();
+            alert('Clipboard copy failed. Downloaded a .md file instead.');
+        });
+} else {
+    downloadMarkdown();
+}

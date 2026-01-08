@@ -33,7 +33,9 @@ When the bookmarklet is clicked on a ChatGPT conversation page:
 - KaTeX math is converted to Markdown-friendly delimiters:
   - Inline math uses `$...$`
   - Display math uses `$$` on their own lines, with blank lines before and after
-- A `.md` file is downloaded and named using `document.title`.
+- You will be prompted to either:
+  - Copy the Markdown to the clipboard, or
+  - Download a `.md` file named using `document.title` (fallback if clipboard copy fails).
 
 ### Output format
 
