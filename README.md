@@ -25,6 +25,24 @@ The build step bundles `gpt2md.js` and writes the bookmarklet output to `dist/gp
 
 ## How it works
 
-Once the bookmarklet link is clicked on a ChatGPT conversation page the `document.body` is cloned and modified in the cloned version to remove any unnecessary information, ensuring a clean and concise output. Finally, the resulting HTML code is converted to markdown format and downloaded as a text file. The file is automatically named based on the conversation's title in the ChatGPT interface.
+When the bookmarklet is clicked on a ChatGPT conversation page:
 
-With the ChatGPT Export browser bookmarklet, archiving and sharing your ChatGPT conversations as markdown files becomes a seamless process, enhancing your productivity and collaboration.
+- The page `document.body` is cloned so the live page isn't modified.
+- Unwanted UI elements are removed from the clone (headers around code blocks, prompt/response numbering, footer).
+- Prompt and response content is converted from HTML to Markdown using Turndown (with GFM table support), preserving code blocks.
+- KaTeX math is converted to Markdown-friendly delimiters:
+  - Inline math uses `$...$`
+  - Display math uses `$$` on their own lines, with blank lines before and after
+- A `.md` file is downloaded and named using `document.title`.
+
+### Output format
+
+- The document starts with `# <conversation title>`.
+- Each message is wrapped in a top-level heading:
+  - `# PROMPT n`
+  - `# RESPONSE n`
+- To keep the table of contents stable, any message-level H1 headings are demoted to H2 before conversion (so in-message `#` becomes `##`).
+
+### Formatting choices
+
+This fork currently emits ATX headings (`#`) and uses `-` for list bullets. You can tweak the output by changing the Turndown options in `gpt2md.js`.

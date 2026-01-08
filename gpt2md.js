@@ -23,6 +23,14 @@ const extractLatex = (node) => {
     return node.textContent ? node.textContent.trim() : '';
 };
 
+const renameTag = (node, tagName) => {
+    if (!node || !node.parentNode) return;
+    const replacement = node.ownerDocument.createElement(tagName);
+    Array.from(node.attributes).forEach((attr) => replacement.setAttribute(attr.name, attr.value));
+    while (node.firstChild) replacement.appendChild(node.firstChild);
+    node.parentNode.replaceChild(replacement, node);
+};
+
 ts.addRule('math', {
     filter: function (node) {
         if (!node || node.nodeType !== 1 || !node.classList) return false;
@@ -61,6 +69,10 @@ body.querySelectorAll('.text-message pre').forEach((n) => {
   n.innerHTML = n.querySelector('code').outerHTML;
 });
 
+// Ensure chat headings don't outrank PROMPT/RESPONSE headings in the TOC:
+// demote any message-level H1 to H2 before converting to Markdown.
+body.querySelectorAll('.text-message h1').forEach((n) => renameTag(n, 'h2'));
+
 // Iterate through main text containers and create text to export
 let text = `# ${document.title}\n\n`;
 body.querySelectorAll('.text-message').forEach((n, i) => {
@@ -68,14 +80,14 @@ body.querySelectorAll('.text-message').forEach((n, i) => {
     const prose = n.querySelector('.prose');
     if (prose) {
         // Only convert response markup to markdown
-        text += `## RESPONSE ${num}\n\n${ts.turndown(prose.innerHTML)}\n\n`;
+        text += `# RESPONSE ${num}\n\n${ts.turndown(prose.innerHTML)}\n\n`;
     } else {
         // Convert prompt HTML to markdown to preserve code fences/math
         // Original (kept for easy revert):
-        // text += `## PROMPT ${num}\n\n${n.querySelector('div').innerText}\n\n`;
+        // text += `# PROMPT ${num}\n\n${n.querySelector('div').innerText}\n\n`;
         const prompt = n.querySelector('.whitespace-pre-wrap') || n.querySelector('div');
         const promptHtml = prompt ? prompt.innerHTML : n.innerHTML;
-        text += `## PROMPT ${num}\n\n${ts.turndown(promptHtml)}\n\n`;
+        text += `# PROMPT ${num}\n\n${ts.turndown(promptHtml)}\n\n`;
     }
 });
 
