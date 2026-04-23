@@ -62,11 +62,22 @@ body.querySelectorAll('pre .text-xs').forEach(n => n.parentNode?.removeChild(n))
 body.querySelectorAll('div .text-xs.gap-1').forEach(n => n.parentNode?.removeChild(n));
 
 // Remove footer
-body.querySelector('#thread-bottom-container').remove()
+body.querySelector('#thread-bottom-container')?.remove()
 
 // properly format code blocks
 body.querySelectorAll('.text-message pre').forEach((n) => {
-  n.innerHTML = n.querySelector('code').outerHTML;
+  const code = n.querySelector('code');
+  if (code) {
+    n.innerHTML = code.outerHTML;
+    return;
+  }
+
+  // New ChatGPT code blocks may render via CodeMirror markup without a <code> node.
+  const cmContent = n.querySelector('.cm-content');
+  const text = cmContent?.innerText ?? n.innerText ?? '';
+  const replacement = n.ownerDocument.createElement('code');
+  replacement.textContent = text;
+  n.replaceChildren(replacement);
 });
 
 // Ensure chat headings don't outrank PROMPT/RESPONSE headings in the TOC:
